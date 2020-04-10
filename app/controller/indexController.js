@@ -1,7 +1,7 @@
 const compose = require('koa-compose');
 
-const wpOptionsRouter = require('./wp_options');
-const homeRouter = require('./home');
+const wpOptionsRouter = require('./wpOptionsController');
+const homeRouter = require('./homeController');
 
 const router = compose([
   homeRouter.routes(),

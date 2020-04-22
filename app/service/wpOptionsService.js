@@ -1,23 +1,28 @@
-let wpEndpoint;
-let oldURL;
-let newURL;
+const axios = require('axios');
 
 async function getWpOptions(ctx) {
-  wpEndpoint = ctx.request.query.wpEndpoint;
+  let wpEndpoint = ctx.request.query.wpEndpoint;
 
-  let wordpressData = await ctx.get(wpEndpoint);
-
-  return wordpressData;
+  return (await axios.get(wpEndpoint)).data;
 }
 
 async function postWpOptions(ctx) {
-  wpEndpoint = ctx.body.wpEndpoint;
-  oldURL = ctx.body.oldURL;
-  newURL = ctx.body.newURL;
+  let wpEndpoint = ctx.body.wpEndpoint;
+  let oldURL = ctx.body.oldURL;
+  let newURL = ctx.body.newURL;
+  
+  let wordpressData = (await axios.get(wpEndpoint)).data;
 
-  let wordpressData = await ctx.get(wpEndpoint);
+  let str = JSON.stringify(wordpressData, null, '  ');
+  let index = str.indexOf(oldURL);
+  while(index >= 0) {
+    str = str.replace(oldURL, newURL);
+    index = str.indexOf(oldURL, index);
+  }
 
-  return wordpressData;
+  await axios.post(wpEndpoint, JSON.parse(str));
+
+  return (await axios.get(wpEndpoint)).data;
 }
 
 module.exports = {getWpOptions, postWpOptions}

@@ -10,14 +10,18 @@ router.get('/', async ctx => {
 
 router.get('/old-data', async ctx => {
   let wpEndpoint = ctx.request.query.wpEndpoint;
-  let oldData = JSON.stringify(await wpOptionsService.getWpOptions(ctx), null, '  ');
-  let locals = { wpEndpoint, oldData };
+  let oldData = await wpOptionsService.getWpOptions(ctx);
+  let locals = { wpEndpoint, oldData: JSON.stringify(oldData, null, ' ') };
   await ctx.render('wp_options/saveWpOptions', locals);
 });
 
 router.post('/new-data', async ctx => {
   ctx.body = ctx.request.body;
-  let locals = {oldData: JSON.stringify(await postWpOptions(ctx), null, '  ')};
+
+  let updatedData = await wpOptionsService.postWpOptions(ctx);
+
+  let locals = {newData: JSON.stringify(updatedData, null, ' ')};
+
   await ctx.render('wp_options/saveWpOptions', locals);
 });
 

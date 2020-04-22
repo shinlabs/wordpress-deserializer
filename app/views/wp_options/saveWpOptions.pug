@@ -45,15 +45,17 @@ html
           type="submit"
         ) Changer l'URL
 
-      if oldData || newData
-        -var data = oldData ? oldData : newData
+      if oldData
         #displayOld
-          if oldData
-            h1 Old Data
-          else
-            h1 Saved Data
-          pre(style="height:500px")
-            code.prettyprint #{data}
+          h1 Old Data
+          pre(style="height:410px")
+            code.prettyprint #{oldData}
+      
+      if newData
+        #displayNew
+          h1 New Data
+          pre(style="height:410px")
+            code.prettyprint #{newData}
         
 
     script(
